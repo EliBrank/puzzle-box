@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Mysterious Puzzle Box</title>
+    <meta name="author" content="Elias Brinkman">
+    <link rel='stylesheet' href='src/style.css'>
+  </head>
+  <body>
+    <h1>Puzzle Tests</h1>
+
+    <h2>Moon Puzzle</h2>
+    <div id="moon-puzzle" class="game-container">
+      <div id="moon-buttons">
+        <button class="moon-button button-off"></button>
+        <button class="moon-button button-off"></button>
+        <button class="moon-button button-off"></button>
+        <button class="moon-button button-off"></button>
+        <button class="moon-button button-off"></button>
+        <button class="moon-button button-off"></button>
+        <button class="moon-button button-off"></button>
+        <button class="moon-button button-off"></button>
+      </div>
+      <p>This puzzle is currently <span id="moon-solve-status">unsolved</span></p>
+    </div>
+
+    <h2>Direction Puzzle</h2>
+    <div id="direction-puzzle" class="game-container">
+      <div id="direction-buttons" class="grid-container">
+        <button id="north" class="direction-button north">N</button>
+        <button id="west" class="direction-button west">W</button>
+        <button id="east" class="direction-button east">E</button>
+        <button id="south" class="direction-button south">S</button>
+      </div>
+      <p>This puzzle is currently <span id="direction-solve-status">unsolved</span></p>
+    </div>
+
+    <h2>Balance Puzzle</h2>
+    <script type="module" src="/src/tests.js"></script>
+  </body>
+</html>
