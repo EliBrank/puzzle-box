@@ -8,6 +8,9 @@ const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+// updates animation every frame
+const clock = new THREE.Clock();
+
 // create backup camera
 let currentCamera = new THREE.PerspectiveCamera(
   75,
@@ -22,41 +25,120 @@ currentCamera.updateProjectionMatrix();
 // orbit functionality
 const controls = new OrbitControls(currentCamera, renderer.domElement);
 controls.enableDamping = true;
+controls.enablePan = false;
+controls.minDistance = 2.5;
+controls.maxDistance = 10;
 
-const loader = new GLTFLoader();
-loader.load(
-  '/puzzlebox.glb',
-  (gltf) => {
-    const loadedScene = gltf.scene;
-    scene.add(loadedScene);
+// raycast/mouse interaction
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
 
-    if (gltf.cameras && gltf.cameras.length > 0) {
-      currentCamera = gltf.cameras[0];
-      controls.object = currentCamera;
-      currentCamera.aspect = window.innerWidth / window.innerHeight;
-      currentCamera.updateProjectionMatrix();
-      console.log(`camera loaded from model: ${currentCamera}`);
-    }
+// interactive buttons
+const interactiveObjects = [];
 
-    // scene logged for debugging
-    console.log(gltf);
-  },
-  (xhr) => {
-    console.log(`Loading: ${(xhr.loaded / xhr.total) * 100}%`);
-  },
-  (error) => {
-    console.error(`Error: ${error}`);
+// mixer for animations
+let mixer;
+const actions = {};
+let gltfAnimations = [];
+
+
+function loadGLTFModel(modelFilePath) {
+  return new Promise((resolve, reject) => {
+    const loader = new GLTFLoader();
+    loader.load(
+      modelFilePath,
+      (gltf) => {
+        scene.add(gltf.scene);
+
+        // Populate gltfAnimations and expose it globally
+        gltfAnimations = gltf.animations;
+        window.gltfAnimations = gltf.animations;
+
+        // Set up the animation mixer
+        mixer = new THREE.AnimationMixer(gltf.scene);
+
+        gltf.scene.traverse((child) => {
+          if (child.isMesh && child.name.startsWith('Button_Press')) {
+            interactiveObjects.push(child);
+          }
+        });
+
+        // Set up the GLTF camera if available
+        if (gltf.cameras.length > 0) {
+          currentCamera = gltf.cameras[0];
+          controls.object = currentCamera;
+          currentCamera.aspect = window.innerWidth / window.innerHeight;
+          currentCamera.updateProjectionMatrix();
+        }
+
+        console.log('GLTF loaded successfully:', gltf);
+        resolve(gltf); // Resolve the promise when the model is fully loaded
+      },
+      undefined,
+      (error) => {
+        console.error('Error loading GLTF:', error);
+        reject(error); // Reject the promise if there's an error
+      }
+    );
+  });
+}
+
+// animation player
+function playAnimation(animName) {
+  if (!mixer || gltfAnimations.length === 0) {
+    console.warn('No animations loaded or mixer is not initialized.');
+    return;
   }
-);
 
+  console.log('Available animations:', gltfAnimations.map((clip) => clip.name));
+  console.log(`Searching for animation: ${animName}`);
+
+  const clip = THREE.AnimationClip.findByName(gltfAnimations, animName);
+  if (!clip) {
+    console.warn(`Animation '${animName}' not found.`);
+    return;
+  }
+
+  const action = mixer.clipAction(clip);
+
+  // Always reset the action before playing
+  action.reset();
+  action.setLoop(THREE.LoopOnce); // Ensure it plays only once
+  action.clampWhenFinished = true; // Retain final frame state
+  action.play();
+
+  console.log(`Playing animation: ${clip.name}`);
+}
+
+window.playAnimation = playAnimation;
+
+loadGLTFModel('/puzzlebox.glb')
+  .then((gltf) => {
+    // Log animations after they are loaded
+    console.log('Animations loaded:', gltfAnimations.map((clip) => clip.name));
+  })
+  .catch((error) => {
+    console.error('Failed to load GLTF model:', error);
+  });
+
+// handle window resize
 window.addEventListener('resize', () => {
   currentCamera.aspect = window.innerWidth / window.innerHeight;
   currentCamera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
+
+// animation loop
 function animate() {
   requestAnimationFrame(animate);
+
+  const delta = clock.getDelta();
+
+  if (mixer) {
+    mixer.update(delta);
+  }
+
   controls.update();
   renderer.render(scene, currentCamera);
 }
