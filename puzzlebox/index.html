@@ -7,9 +7,53 @@
     <title>The Mysterious Puzzle Box</title>
     <meta name="author" content="Elias Brinkman">
     <link rel='stylesheet' href='src/style.css'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sorts+Mill+Goudy:ital@0;1&family=Special+Elite&display=swap" rel="stylesheet">
   </head>
   <body>
-    <button type="button" class="testing-button"><a href="/tests">Link to tests</a></button>
+    <header class="nav-wrapper container">
+      <nav class="nav-buttons">
+        <button type="button" id="intro-button" class="btn">Open Intro</button>
+        <button type="button" class="btn"><a href="/tests">Look Inside</a></button>
+      </nav>
+    </header>
+
+
+    <div id="intro" class="modal">
+      <div class="modal-content container">
+        <div class="close-container">
+          <i id="intro-close" class="close">×</i>
+        </div>
+        <div class="modal-header">
+          <h1 class="site-title">The Mysterious Puzzle Box</h1>
+        </div>
+        <div class="modal-body">
+          <div class="modal-column">
+            <p>Hello! I hope this package has found you well. As I've already detailed in my previous correspondence, this puzzle box has confounded me to no end. I have not the patience nor the acumen for such an endeavor—at least not like my Uncle Gideon. It is my hope that you can reveal whatever it was he decided to hide away inside that dreadful thing. I wish I could provide greater guidance.</p>
+            <br>
+            <p>The most I can offer you is this torn bit of letter originally attached to the box.</p>
+            <br>
+            <p>I've searched extensively for the missing piece but it appears that what I've sent is all that remains. Nevertheless, I maintain that if anyone will open this infernal crate, it will be you.</p>
+            <br>
+            <p class="postscript">P.S. Against my better judgement I've reset the initial locking mechanism to make the box safer in transit. To unlock it, enter "South," "West," "East," then "North" using the buttons on top of the box. Godspeed!</p>
+          </div>
+          <div class="modal-column">
+            <img src="/intro_letter.png"
+                class="letter-image"
+                alt="In-universe note from the uncle of the person writing the rest of this letter"
+                aria-describedby="intro-letter-text">
+            <div id="intro-letter-text" class="visually-hidden">
+              <p>My dearest nephew,</p>
+              <p>I deciphered the wonderful little puzzles hidden in this box. What great fun! I wanted to pass along the same joys I found, so I've reset its mechanisms and sent it back your way with something of my own hidden inside. Just keep in mind that the box can only be opened</p>
+              <p>[within an s-shaped box] when the fourth display alights</p>
+              <p>If you have troubles, all ... to do is to simply ... and ... [much of the letter's final portion is cut off]</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

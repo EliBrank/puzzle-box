@@ -4,7 +4,10 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 // scene, renderer elements
 const scene = new THREE.Scene();
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+const renderer = new THREE.WebGLRenderer({
+  antialias: true,
+  alpha: true
+});
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
@@ -142,5 +145,20 @@ function animate() {
   controls.update();
   renderer.render(scene, currentCamera);
 }
+
+
+// modal code
+const intro = document.getElementById('intro');
+const introBtn = document.getElementById('intro-button');
+const introClose = document.getElementById('intro-close');
+
+introBtn.addEventListener('click', function() {
+  intro.style.display = 'block';
+});
+
+introClose.addEventListener('click', function() {
+  intro.style.display = 'none';
+});
+
 
 animate();

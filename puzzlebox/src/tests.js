@@ -77,3 +77,29 @@ document.querySelectorAll('.direction-button').forEach(button => {
   });
 });
 
+
+// BALANCE PUZZLE
+
+class BalancePuzzle {
+  constructor() {
+    this.colorOptions = [
+      {'red': 2},
+      {'blue': 3},
+      {'green': 7},
+      {'yellow': 9}
+    ];
+
+    this.colors = {
+      colorA: 0,
+    }
+  }
+}
+
+
+const swappableWeights = [
+{'red': 2},
+{'blue': 3},
+{'green': 7},
+{'yellow': 9},
+  {'purple': 13}
+]
