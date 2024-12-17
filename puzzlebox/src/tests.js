@@ -83,23 +83,72 @@ document.querySelectorAll('.direction-button').forEach(button => {
 class BalancePuzzle {
   constructor() {
     this.colorOptions = [
-      {'red': 2},
-      {'blue': 3},
-      {'green': 7},
-      {'yellow': 9}
+      { 'red': 2 },
+      { 'blue': 3 },
+      { 'green': 7 },
+      { 'yellow': 9 },
+      { 'purple': 13 },
+      { 'white': 0 }
     ];
 
-    this.colors = {
-      colorA: 0,
+    // give weight variables an index value corresponding to colorOptions
+    this.weights = {
+      weightA: 0,
+      weightB: 0,
+      weightC: 0,
+      // weightD always set to purple/13
+      weightD: 4
+    };
+
+    this.indicatorMap = {
+      weightA: document.querySelector('indicator-a'),
+      weightB: document.querySelector('indicator-b'),
+      weightC: document.querySelectorAll('indicator-c'),
+      weightD: document.querySelector('indicator-d'),
+    };
+
+    this.colorHexCodes = {
+      'red': '#FF0000',
+      'blue': '#0000FF',
+      'green': '#00FF00',
+      'yellow': '#FFFF00',
+      'purple': '#000000',
+      'white': '#FFFFFF',
+    }
+
+    this.setupEventListeners();
+
+    this.updateAllIndicators();
+  }
+
+  setupEventListeners() {
+    document.getElementById('button-a').addEventListener('click', () => this.cycleColor('weightA'));
+    document.getElementById('button-b').addEventListener('click', () => this.cycleColor('weightB'));
+    document.getElementById('button-c').addEventListener('click', () => this.cycleColor('weightC'));
+  }
+
+  cycleColor(weightKey) {
+    if (weightKey !== 'weightD') {
+      this.weights[weightKey] = (this.weights[weightKey] + 1) % 4;
+      this.updateColorIndicator(colorKey);
     }
   }
+
+  updateColorIndicator(weightKey) {
+    const weightIndex = this.weights[weightKey];
+    const colorName = Object.keys(this.colorOptions[weightIndex])[0];
+
+    if (weightKey === 'weightC') {
+      document.querySelectorAll('.indicator-c').forEach((indicator) => {
+        this.setIndicatorColor(indicator, colorName);
+      });
+    } else {
+      const indicator = this.indicatorMap[weightKey];
+      this.setIndicatorColor(indicator, colorName);
+    }
+  }
+
+  setIndicatorColor(indicatorElement, colorName) {
+    // TODO - add class elements
+  }
 }
-
-
-const swappableWeights = [
-{'red': 2},
-{'blue': 3},
-{'green': 7},
-{'yellow': 9},
-  {'purple': 13}
-]

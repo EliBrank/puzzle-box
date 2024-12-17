@@ -9,9 +9,9 @@
     <link rel='stylesheet' href='src/tests.css'>
   </head>
   <body>
-    <h1>Puzzle Tests</h1>
+    <h1 class="page-title">Puzzle Tests</h1>
 
-    <h2>Moon Puzzle</h2>
+    <h2 class="puzzle-title">Moon Puzzle</h2>
     <div id="moon-puzzle" class="game-container">
       <div id="moon-buttons">
         <button class="moon-button button-off"></button>
@@ -23,10 +23,12 @@
         <button class="moon-button button-off"></button>
         <button class="moon-button button-off"></button>
       </div>
-      <p>This puzzle is currently <span id="moon-solve-status">unsolved</span></p>
+      <div class="solve-status-message">
+        <p>This puzzle is currently <span id="moon-solve-status">unsolved</span></p>
+      </div>
     </div>
 
-    <h2>Direction Puzzle</h2>
+    <h2 class="puzzle-title">Direction Puzzle</h2>
     <div id="direction-puzzle" class="game-container">
       <div id="direction-buttons" class="grid-container">
         <button id="north" class="direction-button north">N</button>
@@ -34,10 +36,37 @@
         <button id="east" class="direction-button east">E</button>
         <button id="south" class="direction-button south">S</button>
       </div>
-      <p>This puzzle is currently <span id="direction-solve-status">unsolved</span></p>
+      <div class="solve-status-message">
+        <p>This puzzle is currently <span id="direction-solve-status">unsolved</span></p>
+      </div>
     </div>
 
-    <h2>Balance Puzzle</h2>
+    <h2 class="puzzle-title">Scales Puzzle</h2>
+    <div id="scales-puzzle" class="game-container">
+      <div class="scales-buttons">
+        <button id="button-a" class="scales-button">A</button>
+        <button id="button-b" class="scales-button">B</button>
+        <button id="button-c" class="scales-button">C</button>
+      </div>
+      <div class="scales-indicators">
+        <div class="scales-col">
+          <div class="scales-indicator-light indicator-a">A</div>
+          <div class="scales-indicator-light indicator-b">B</div>
+          <div class="scales-indicator-light indicator-c">C</div>
+        </div>
+        <div class="scales-col">
+          <div class="scales-indicator-light indicator-c">C</div>
+          <div class="scales-indicator-light indicator-c">C</div>
+          <div class="scales-indicator-light indicator-d">D</div>
+        </div>
+      </div>
+      <button class="scales-button">?</button>
+      <div class="solve-status-message">
+        <p>The left side is evaluated to be <span class="weight-compare-status">lighter than</span> the right side, so</p>
+        <p>This puzzle is currently <span id="scales-solve-status">unsolved</span></p>
+      </div>
+    </div>
+
     <script type="module" src="/src/tests.js"></script>
   </body>
 </html>

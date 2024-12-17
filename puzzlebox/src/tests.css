@@ -36,8 +36,27 @@ button {
 
 /* TESTING */
 
-.game-container {
+.page-title {
+  font-size: 3rem;
   text-align: center;
+  margin-block: 2rem;
+}
+
+.puzzle-title {
+  font-size: 2rem;
+  text-align: center;
+}
+
+.game-container {
+  --max-width: 976px;
+  --padding: 1rem;
+
+  width: min(var(--max-width), 100% - (var(--padding) * 2));
+
+  text-align: center;
+  margin: 1rem auto;
+  border: 1px solid black;
+  padding-block: 2rem;
 }
 
 .moon-button {
@@ -81,6 +100,40 @@ button {
 
 .direction-button:active {
   background-color: lightgreen;
+}
+
+.scales-button {
+  width: 50px;
+  height: 50px;
+}
+
+.scales-indicators {
+  width: 200px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: center;
+  margin: 1rem auto;
+}
+
+.scales-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.scales-indicator-light {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+.solve-status-message {
+  margin-top: 2rem;
 }
 
 /* UTILITY */

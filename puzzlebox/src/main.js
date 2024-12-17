@@ -30,7 +30,7 @@ const controls = new OrbitControls(currentCamera, renderer.domElement);
 controls.enableDamping = true;
 controls.enablePan = false;
 controls.minDistance = 2.5;
-controls.maxDistance = 10;
+controls.maxDistance = 12;
 
 // raycast/mouse interaction
 const raycaster = new THREE.Raycaster();
