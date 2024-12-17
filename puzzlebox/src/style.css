@@ -63,15 +63,21 @@ button {
 .nav-wrapper {
   --padding: 2rem;
   margin-top: 2rem;
+  display: flex;
 }
 
-.nav-buttons button:not(:first-child) {
-  margin-left: 1rem;
+.nav-buttons {
+  display: flex;
+  gap: 1rem;
 }
 
 @media screen and (width < 576px) {
   .nav-wrapper {
-    text-align: center;
+    justify-content: center;
+  }
+
+  .nav-buttons {
+    flex-direction: column;
   }
 }
 

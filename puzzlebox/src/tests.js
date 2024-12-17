@@ -83,12 +83,12 @@ document.querySelectorAll('.direction-button').forEach(button => {
 class BalancePuzzle {
   constructor() {
     this.colorOptions = [
-      { 'red': 2 },
-      { 'blue': 3 },
-      { 'green': 7 },
-      { 'yellow': 9 },
-      { 'purple': 13 },
-      { 'white': 0 }
+      { 'colorOne': 2 },
+      { 'colorTwo': 3 },
+      { 'colorThree': 7 },
+      { 'colorFour': 9 },
+      { 'colorStatic': 13 },
+      { 'colorSuccess': 0 }
     ];
 
     // give weight variables an index value corresponding to colorOptions
@@ -101,20 +101,23 @@ class BalancePuzzle {
     };
 
     this.indicatorMap = {
-      weightA: document.querySelector('indicator-a'),
-      weightB: document.querySelector('indicator-b'),
-      weightC: document.querySelectorAll('indicator-c'),
-      weightD: document.querySelector('indicator-d'),
+      weightA: document.querySelector('.indicator-a'),
+      weightB: document.querySelector('.indicator-b'),
+      weightC: document.querySelectorAll('.indicator-c'),
+      weightD: document.querySelector('.indicator-d'),
     };
 
     this.colorHexCodes = {
-      'red': '#FF0000',
-      'blue': '#0000FF',
-      'green': '#00FF00',
-      'yellow': '#FFFF00',
-      'purple': '#000000',
-      'white': '#FFFFFF',
+      'colorOne': '#990000',
+      'colorTwo': '#009900',
+      'colorThree': '#000099',
+      'colorFour': '#C99700',
+      'colorStatic': '#900090',
+      'colorSuccess': '#FFFFFF',
     }
+
+    this.weightCompareStatus = document.getElementById('weight-compare-status');
+    this.scalesSolveStatus = document.getElementById('scales-solve-status');
 
     this.setupEventListeners();
 
@@ -125,12 +128,42 @@ class BalancePuzzle {
     document.getElementById('button-a').addEventListener('click', () => this.cycleColor('weightA'));
     document.getElementById('button-b').addEventListener('click', () => this.cycleColor('weightB'));
     document.getElementById('button-c').addEventListener('click', () => this.cycleColor('weightC'));
+    document.getElementById('button-check').addEventListener('click', () => this.checkBalance());
+  }
+
+  checkBalance() {
+    const leftSide =
+      this.getCurrentValue('weightA') +
+      this.getCurrentValue('weightB') +
+      this.getCurrentValue('weightC');
+
+    const rightSide =
+      this.getCurrentValue('weightC') +
+      this.getCurrentValue('weightC') +
+      this.getCurrentValue('weightD');
+
+    if (leftSide === rightSide) {
+      this.setSolvedState();
+    } else if (leftSide < rightSide) {
+      this.weightCompareStatus.textContent = 'lighter than';
+      this.scalesSolveStatus.textContent = 'unsolved';
+    } else {
+      this.weightCompareStatus.textContent = 'heavier than';
+      this.scalesSolveStatus.textContent = 'unsolved';
+    }
+  }
+
+  getCurrentValue(weightKey) {
+    const weightIndex = this.weights[weightKey];
+    const colorName = Object.keys(this.colorOptions[weightIndex])[0];
+    // extract value from colorOptions array
+    return this.colorOptions[weightIndex][colorName];
   }
 
   cycleColor(weightKey) {
     if (weightKey !== 'weightD') {
       this.weights[weightKey] = (this.weights[weightKey] + 1) % 4;
-      this.updateColorIndicator(colorKey);
+      this.updateColorIndicator(weightKey);
     }
   }
 
@@ -138,17 +171,59 @@ class BalancePuzzle {
     const weightIndex = this.weights[weightKey];
     const colorName = Object.keys(this.colorOptions[weightIndex])[0];
 
+    // there are multiple C indicators/weights
     if (weightKey === 'weightC') {
       document.querySelectorAll('.indicator-c').forEach((indicator) => {
         this.setIndicatorColor(indicator, colorName);
       });
     } else {
+      // target indicator related to weight
       const indicator = this.indicatorMap[weightKey];
       this.setIndicatorColor(indicator, colorName);
     }
   }
 
   setIndicatorColor(indicatorElement, colorName) {
-    // TODO - add class elements
+    if (indicatorElement) {
+      indicatorElement.style.backgroundColor = this.colorHexCodes[colorName];
+    }
+  }
+
+  updateAllIndicators() {
+    // update colors for weight indicators A, B, C
+    ['weightA', 'weightB', 'weightC'].forEach((key) => {
+      this.updateColorIndicator(key);
+    });
+
+    // make sure D is set
+    const indicatorD = this.indicatorMap['weightD'];
+    this.setIndicatorColor(indicatorD, 'colorStatic');
+  }
+
+  setSolvedState() {
+    this.weightCompareStatus.textContent = 'equal to';
+    this.scalesSolveStatus.textContent = 'solved';
+
+    document.getElementById('button-a').disabled = true;
+    document.getElementById('button-b').disabled = true;
+    document.getElementById('button-c').disabled = true;
+    document.getElementById('button-check').disabled = true;
+
+    console.log('you win');
+
+    ['weightA', 'weightB', 'weightC', 'weightD'].forEach((key) => {
+      if (key === 'weightC') {
+        document.querySelectorAll('.indicator-c').forEach((indicator) => {
+          this.setIndicatorColor(indicator, 'colorSuccess');
+        });
+      } else {
+        const indicator = this.indicatorMap[key];
+        this.setIndicatorColor(indicator, 'colorSuccess');
+      }
+    });
   }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  window.balancePuzzle = new BalancePuzzle();
+});
