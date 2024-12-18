@@ -53,16 +53,38 @@ function loadGLTFModel(modelFilePath) {
       (gltf) => {
         scene.add(gltf.scene);
 
-        // Populate gltfAnimations and expose it globally
+        // populate gltfAnimations and expose globally
         gltfAnimations = gltf.animations;
-        window.gltfAnimations = gltf.animations;
+        // window.gltfAnimations = gltf.animations;
 
-        // Set up the animation mixer
+        // set up animation mixer
         mixer = new THREE.AnimationMixer(gltf.scene);
 
         gltf.scene.traverse((child) => {
-          if (child.isMesh && child.name.startsWith('Button_Press')) {
+          if (child.isMesh && child.name.startsWith('Press_Button_')) {
+            // save button obj to list for later
             interactiveObjects.push(child);
+
+            // determine the action name for associated button
+            const actionName = child.name;
+
+            // store action name on parent bone obj
+            const parentBone = child.parent;
+
+            if (actionName && parentBone) {
+              const clip = THREE.AnimationClip.findByName(gltf.animations, actionName);
+
+              if (clip) {
+                const action = mixer.clipAction(clip, parentBone);
+                child.userData.animationAction = action;
+              }
+
+              console.log(
+                `button: ${child.name}, parent bone: ${parentBone}, loaded action: ${actionName}`
+              );
+            } else {
+              console.warn(`no action found for button: ${child.name}`);
+            }
           }
         });
 
@@ -84,6 +106,20 @@ function loadGLTFModel(modelFilePath) {
       }
     );
   });
+}
+
+function handleButtonClick(button) {
+  const action = button.userData.animationAction;
+
+  if (action) {
+    action.reset();
+    action.setLoop(THREE.LoopOnce);
+    action.clampWhenFinished = true;
+    action.play();
+    console.log(`Playing animation: ${action}`);
+  } else {
+    console.warn(`no animation found for button: ${button}`);
+  }
 }
 
 // animation player
@@ -131,6 +167,19 @@ window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
+window.addEventListener('click', (event) => {
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+  raycaster.setFromCamera(mouse, currentCamera);
+
+  const intersects = raycaster.intersectObjects(interactiveObjects);
+
+  if (intersects.length > 0) {
+    const clickedButton = intersects[0].object;
+    handleButtonClick(clickedButton);
+  }
+});
 
 // animation loop
 function animate() {

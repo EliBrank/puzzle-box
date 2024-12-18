@@ -1,81 +1,98 @@
 // MOON PUZZLE
 
-const moonButtons = Array.from(document.getElementById('moon-buttons').children);
-const CORRECT_BUTTONS = [1, 3, 5];
+class MoonPuzzle {
+  constructor() {
+    this.buttons = Array.from(document.getElementById('moon-buttons').children);
+    this.CORRECT_BUTTONS = [1, 3, 5];
 
-console.log(moonButtons);
+    // Set up event listeners
+    this.setupEventListeners();
+  }
 
-function checkMoonSolveStatus() {
-  // create new array of booleans with 'true' at indices for all 'on' buttons
-  const buttonStates = moonButtons.map((button) => {
-    return !button.classList.contains('button-off');
-  });
-
-  console.log(buttonStates);
-
-  const solved = CORRECT_BUTTONS.every(index => buttonStates[index]) &&
-    buttonStates.every((state, index) =>
-      CORRECT_BUTTONS.includes(index) ? state : !state
-    );
-
-  if (solved) {
-    const moonSolveStatus = document.getElementById('moon-solve-status');
-    moonSolveStatus.textContent = 'solved';
-
-
-    moonButtons.forEach((button) => {
-      button.removeEventListener('click', toggleButton);
+  setupEventListeners() {
+    this.buttons.forEach((button) => {
+      button.addEventListener('click', (event) => this.toggleButton(event));
     });
   }
+
+  toggleButton(event) {
+    const button = event.target;
+    button.classList.toggle('button-off');
+    button.classList.toggle('button-on');
+    this.checkMoonSolveStatus();
+  }
+
+  checkMoonSolveStatus() {
+    // create new array of booleans with 'true' at indices for all 'on' buttons
+    const buttonStates = this.buttons.map((button) => {
+      return !button.classList.contains('button-off');
+    });
+
+    const solved = this.CORRECT_BUTTONS.every(index => buttonStates[index]) &&
+      buttonStates.every((state, index) =>
+        this.CORRECT_BUTTONS.includes(index) ? state : !state
+      );
+
+    if (solved) {
+      const moonSolveStatus = document.getElementById('moon-solve-status');
+      moonSolveStatus.textContent = 'solved';
+
+      // Remove event listeners
+      this.buttons.forEach((button) => {
+        button.removeEventListener('click', this.toggleButton);
+      });
+    }
+  }
 }
-
-function toggleButton(event) {
-  event.target.classList.toggle('button-off');
-  event.target.classList.toggle('button-on');
-
-  checkMoonSolveStatus();
-}
-
-moonButtons.forEach((button) => {
-  button.addEventListener('click', toggleButton);
-});
-
 
 // DIRECTION PUZZLE
 
-let sequenceFound = false;
-const workingArray = Array(8).fill(null);
-const hiddenSequence = ['N', 'E', 'W', 'S', 'N', 'E', 'W', 'S'];
+class DirectionPuzzle {
+  constructor() {
+    this.sequenceFound = false;
+    this.workingArray = Array(8).fill(null);
+    this.hiddenSequence = ['N', 'E', 'W', 'S', 'N', 'E', 'W', 'S'];
 
-function containsSequence(workingArray, sequence) {
-  if (sequenceFound) {
-    return true;
+    // Set up event listeners
+    this.setupEventListeners();
   }
 
-  return workingArray.some((_, index) => {
-    // make sure slice length matches sequence length
-    if (index + sequence.length > workingArray.length) {
-      return false;
-    }
-    const subsequence = workingArray.slice(index, index + sequence.length);
-    return JSON.stringify(subsequence) === JSON.stringify(sequence);
-  });
-}
+  setupEventListeners() {
+    document.querySelectorAll('.direction-button').forEach(button => {
+      button.addEventListener('click', () => this.handleButtonClick(button));
+    });
+  }
 
-document.querySelectorAll('.direction-button').forEach(button => {
-  button.addEventListener('click', () => {
+  handleButtonClick(button) {
     const direction = button.textContent;
-    workingArray.push(direction);
-    workingArray.shift();
-    console.log(workingArray);
+    this.workingArray.push(direction);
+    this.workingArray.shift();
 
-    if (containsSequence(workingArray, hiddenSequence)) {
+    console.log(this.workingArray);
+
+    if (this.containsSequence()) {
       const directionSolveStatus = document.getElementById('direction-solve-status');
-      sequenceFound = true;
+      this.sequenceFound = true;
       directionSolveStatus.textContent = 'solved';
     }
-  });
-});
+  }
+
+  containsSequence() {
+    if (this.sequenceFound) {
+      return true;
+    }
+
+    return this.workingArray.some((_, index) => {
+      // make sure slice length matches sequence length
+      if (index + this.hiddenSequence.length > this.workingArray.length) {
+        return false;
+      }
+
+      const subsequence = this.workingArray.slice(index, index + this.hiddenSequence.length);
+      return JSON.stringify(subsequence) === JSON.stringify(this.hiddenSequence);
+    });
+  }
+}
 
 
 // BALANCE PUZZLE
@@ -225,5 +242,7 @@ class BalancePuzzle {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  window.moonPuzzle = new MoonPuzzle();
+  window.directionPuzzle = new DirectionPuzzle();
   window.balancePuzzle = new BalancePuzzle();
 });
