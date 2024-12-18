@@ -68,7 +68,7 @@ button {
 
 .nav-buttons {
   display: flex;
-  gap: 1rem;
+  gap: 2rem;
 }
 
 @media screen and (width < 576px) {
@@ -80,6 +80,11 @@ button {
     flex-direction: column;
   }
 }
+
+#outro-button {
+  display: none;
+}
+
 
 /* MODAL */
 
@@ -150,7 +155,7 @@ button {
   font-size: 1rem;
 }
 
-.letter-image {
+.modal-image {
   width: 100%;
   margin-inline: auto;
   caret-color: transparent;
@@ -161,7 +166,7 @@ button {
 
 .btn {
   color: var(--clr-primary-light);
-  padding: 0.6rem 2rem 0.5rem;
+  padding: 0.7rem 2rem 0.5rem;
   background: none;
   border: 1px solid var(--clr-primary-light);
 }
@@ -170,6 +175,19 @@ button {
 .btn:focus-visible {
   color: var(--clr-primary-dark);
   background-color: var(--clr-primary-light);
+}
+
+.btn-dark {
+  color: var(--clr-primary-dark);
+  padding: 0.7rem 2rem 0.5rem;
+  background: none;
+  border: 1px solid var(--clr-primary-dark);
+}
+
+.btn-dark:hover,
+.btn-dark:focus-visible {
+  color: var(--clr-primary-light);
+  background-color: var(--clr-primary-dark);
 }
 
 .visually-hidden {

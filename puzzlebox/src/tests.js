@@ -49,9 +49,23 @@ class MoonPuzzle {
 
 class DirectionPuzzle {
   constructor() {
-    this.sequenceFound = false;
-    this.workingArray = Array(8).fill(null);
-    this.hiddenSequence = ['N', 'E', 'W', 'S', 'N', 'E', 'W', 'S'];
+    this.sequences = [
+      {
+        sequence: ['N', 'E', 'W', 'S', 'N', 'E', 'W', 'S'],
+        solved: false,
+      },
+      {
+        sequence: ['S', 'E', 'W', 'N'],
+        solved: false,
+      },
+      {
+        sequence: ['E', 'E', 'W', 'W', 'N', 'N', 'S', 'S', 'E', 'E', 'W', 'W', 'N'],
+        solved: false,
+      }
+    ];
+    this.workingArray = Array(13).fill(null);
+    this.solvedSequences = 0;
+    this.isFullySolved = false;
 
     // Set up event listeners
     this.setupEventListeners();
@@ -70,10 +84,36 @@ class DirectionPuzzle {
 
     console.log(this.workingArray);
 
-    if (this.containsSequence()) {
-      const directionSolveStatus = document.getElementById('direction-solve-status');
-      this.sequenceFound = true;
-      directionSolveStatus.textContent = 'solved';
+    this.checkSequences();
+    this.updateSolveStatus();
+  }
+
+  checkSequences() {
+    this.sequences.forEach((sequenceObj, index) => {
+      // skip solved sequences
+      if (sequenceObj.solved) {
+        return;
+      }
+
+      const isSequenceSolved = this.workingArray.some((_, startIndex) => {
+        // don't continue if not enough elements in working array
+        if (startIndex + sequenceObj.sequence.length > this.workingArray.length) {
+          return false;
+        }
+
+        // only returns true when matching subsequence found
+        const subsequence = this.workingArray.slice(startIndex, startIndex + sequenceObj.sequence.length);
+        return JSON.stringify(subsequence) === JSON.stringify(sequenceObj.sequence);
+      });
+
+      if (isSequenceSolved) {
+        sequenceObj.solved = true;
+        this.solvedSequences++;
+      }
+    });
+
+    if (this.solvedSequences === this.sequences.length) {
+      this.isFullySolved = true;
     }
   }
 
@@ -91,6 +131,17 @@ class DirectionPuzzle {
       const subsequence = this.workingArray.slice(index, index + this.hiddenSequence.length);
       return JSON.stringify(subsequence) === JSON.stringify(this.hiddenSequence);
     });
+  }
+
+  updateSolveStatus() {
+    const fullSolveStatus = document.getElementById('direction-solve-status');
+    const numSolvedSequences = document.getElementById('num-solved-sequences');
+
+    numSolvedSequences.textContent = this.solvedSequences;
+
+    if (this.isFullySolved) {
+      fullSolveStatus.textContent = 'solved';
+    }
   }
 }
 

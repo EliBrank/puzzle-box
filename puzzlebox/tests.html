@@ -14,14 +14,14 @@
     <h2 class="puzzle-title">Moon Puzzle</h2>
     <div id="moon-puzzle" class="game-container">
       <div id="moon-buttons">
-        <button class="moon-button button-off"></button>
-        <button class="moon-button button-off"></button>
-        <button class="moon-button button-off"></button>
-        <button class="moon-button button-off"></button>
-        <button class="moon-button button-off"></button>
-        <button class="moon-button button-off"></button>
-        <button class="moon-button button-off"></button>
-        <button class="moon-button button-off"></button>
+        <button id="moon-button-index-0" class="moon-button button-off">0</button>
+        <button id="moon-button-index-1" class="moon-button button-off">1</button>
+        <button id="moon-button-index-2" class="moon-button button-off">2</button>
+        <button id="moon-button-index-3" class="moon-button button-off">3</button>
+        <button id="moon-button-index-4" class="moon-button button-off">4</button>
+        <button id="moon-button-index-5" class="moon-button button-off">5</button>
+        <button id="moon-button-index-6" class="moon-button button-off">6</button>
+        <button id="moon-button-index-7" class="moon-button button-off">7</button>
       </div>
       <div class="solve-status-message">
         <p>This puzzle is currently <span id="moon-solve-status">unsolved</span></p>
@@ -37,7 +37,8 @@
         <button id="south" class="direction-button south">S</button>
       </div>
       <div class="solve-status-message">
-        <p>This puzzle is currently <span id="direction-solve-status">unsolved</span></p>
+        <p>This puzzle has 3 hidden sequences. You have found <span id="num-solved-sequences">0</span>.</p>
+        <p>Overall, this puzzle is currently <span id="direction-solve-status">unsolved</span></p>
       </div>
     </div>
 

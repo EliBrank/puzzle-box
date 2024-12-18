@@ -15,10 +15,9 @@
     <header class="nav-wrapper container">
       <nav class="nav-buttons">
         <button type="button" id="intro-button" class="btn">Open Intro</button>
-        <button type="button" class="btn"><a href="/tests">Look Inside</a></button>
+        <button type="button" id="outro-button" class="btn">Look Inside</button>
       </nav>
     </header>
-
 
     <div id="intro" class="modal">
       <div class="modal-content container">
@@ -40,7 +39,7 @@
           </div>
           <div class="modal-column">
             <img src="/intro_letter.png"
-                class="letter-image"
+                class="modal-image"
                 alt="In-universe note from the uncle of the person writing the rest of this letter"
                 aria-describedby="intro-letter-text">
             <div id="intro-letter-text" class="visually-hidden">
@@ -49,6 +48,31 @@
               <p>[within an s-shaped box] when the fourth display alights</p>
               <p>If you have troubles, all ... to do is to simply ... and ... [much of the letter's final portion is cut off]</p>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="outro" class="modal">
+      <div class="modal-content container">
+        <div class="close-container">
+          <i id="outro-close" class="close">×</i>
+        </div>
+        <div class="modal-header">
+          <h2 class="congratulations-text">Congratulations you solved it!</h2>
+        </div>
+        <div class="modal-body">
+          <div class="modal-column">
+            <p>...is what I would say. However, this is but a proof of concept at the moment. The true puzzles have yet to truly be discovered.</p>
+            <br>
+            <p>There are a lot of core features still under development, so please check back later to see the full implementation of "The Mysterious Puzzle Box."</p>
+            <br>
+            <p>In the mean time, feel free to check out the link below to a prototypes page which showcases some functionality for the main puzzle types in the final build.</p>
+            <br>
+            <button type="button" class="btn-dark"><a href="/tests">Link to Prototypes</a></button>
+          </div>
+          <div class="modal-column">
+            <img src="/construction_sign.jpg" class="modal-image" alt="construction zone sign">
           </div>
         </div>
       </div>
