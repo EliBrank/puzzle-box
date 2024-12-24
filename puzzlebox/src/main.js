@@ -151,6 +151,127 @@ function playAnimation(animName) {
 
 window.playAnimation = playAnimation;
 
+class Puzzle {
+  constructor(actions) {
+    this.actions = actions;
+    this.isCompleted = false;
+    this.interactiveButtons = [];
+  }
+
+  handleButtonClick(button) {
+    if (this.isCompleted) {
+      console.log('Puzzle already complete. Button clicks will be ignored.');
+      return;
+    }
+    console.warn('handleButtonClick should be implemented in child classes');
+  }
+
+  markAsCompleted() {
+    this.isCompleted = true;
+
+    // empties interactive objects array of buttons from this puzzle
+    puzzleManager.interactiveObjects = puzzleManager.interactiveObjects.filter((object) => {
+      // return needed?
+      return !this.interactiveButtons.includes(object);
+    });
+
+    // ensure interactive buttons array is empty (just in case)
+    this.interactiveButtons.length = 0;
+
+    console.log('Puzzle marked as complete. Interactions disabled.');
+  }
+
+  registerButton(button) {
+    this.interactiveButtons.push(button);
+    puzzleManager.registerButton(button);
+  }
+
+  playAnimation(name) {
+    if (!this.actions || !this.actions[name]) {
+      console.warn(`Animation not found: ${name}`);
+      return;
+    }
+    const action = this.actions[name];
+    action.reset();
+    action.setLoop(THREE.LoopOnce);
+    action.clampWhenFinished = true;
+    action.play();
+    console.log(`Playing animation: ${name}`);
+  }
+}
+
+class DirectionPuzzle extends Puzzle {
+  constructor(actions) {
+    super(actions);
+    this.sequences = [
+      {
+        sequence: ['S', 'W', 'E', 'N'],
+        solved: false
+      },
+      {
+        sequence: ['E', 'N', 'W', 'W', 'S', 'N', 'E', 'S'],
+        solved: false
+      },
+      {
+        sequence: ['N', 'W', 'S', 'W', 'N', 'W', 'N', 'E', 'N', 'E', 'N', 'W', 'N'],
+        solved: false
+      },
+    ];
+    this.workingArray = Array(13).fill(null);
+    this.solvedSequences = 0;
+    this.isFullySolved = false;
+    console.log('Direction Puzzle initialized');
+  }
+
+  handleButtonClick(button) {
+    const direction = this.getDirectionFromButton(button.name);
+
+    if (!direction) {
+      console.warn(`Unknown button: ${button.name}`);
+      return;
+    }
+
+    this.workingArray.push(direction);
+    this.workingArray.shift();
+    console.log(this.workingArray);
+
+    this.checkSequences(direction);
+  }
+
+  getDirectionFromButton(buttonName) {
+    const mapping = {
+      Press_Button_Directional_S: 'S',
+      Press_Button_Directional_W: 'W',
+      Press_Button_Directional_E: 'E',
+      Press_Button_Directional_N: 'N',
+    };
+    return mapping[buttonName] || null;
+  }
+}
+
+class PuzzleManager {
+  constructor() {
+    this.puzzles = [];
+    this.interactiveObjects = [];
+  }
+
+  addPuzzle(puzzle) {
+    this.puzzles.push(puzzle);
+  }
+
+  registerButton(button) {
+    this.interactiveObjects.push(button);
+  }
+
+  handleClick(button) {
+    this.puzzles.forEach((puzzle) => {
+      if (!puzzle.isCompleted) {
+        puzzle.handleButtonClick(button);
+      }
+    });
+  }
+}
+
 // Direction Puzzle
 class DirectionPuzzle {
   constructor(actions) {
