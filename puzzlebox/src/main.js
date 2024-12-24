@@ -247,6 +247,34 @@ class DirectionPuzzle extends Puzzle {
     };
     return mapping[buttonName] || null;
   }
+
+  checkSequences(lastDirection) {
+    this.sequences.forEach((sequenceObj) => {
+      if (sequenceObj.solved) return;
+
+      const isSequenceSolved = this.workingArray.some((_, startIndex) => {
+        // don't continue if not enough elements in working array
+        if (startIndex + sequenceObj.sequence.length > this.workingArray.length) {
+          return false;
+        }
+
+        // only returns true when matching subsequence found
+        const subsequence = this.workingArray.slice(startIndex, startIndex + sequenceObj.sequence.length);
+        return JSON.stringify(subsequence) === JSON.stringify(sequenceObj.sequence);
+      });
+
+      if (isSequenceSolved) {
+        sequenceObj.solved = true;
+        this.solvedSequences++;
+      }
+    });
+
+    this.isFullySolved = this.solvedSequences === this.sequences.length;
+
+    if (this.isFullySolved) {
+      this.markAsCompleted();
+    }
+  }
 }
 
 class PuzzleManager {
@@ -272,100 +300,14 @@ class PuzzleManager {
   }
 }
 
-// Direction Puzzle
-class DirectionPuzzle {
-  constructor(actions) {
-    this.actions = actions;
-    this.sequences = [
-      /*
-      {
-        sequence: ['S', 'W', 'E', 'N'],
-        solved: false,
-      },
-      {
-        sequence: ['S', 'W', 'E', 'N'],
-        solved: false,
-      },
-      */
-      {
-        sequence: ['S', 'W', 'E', 'N'],
-        solved: false,
-      }
-    ];
-    // TODO - change array length back to 13 when implementing other sequences
-    this.workingArray = Array(13).fill(null);
-    this.solvedSequences = 0;
-    this.isFullySolved = false;
-
-    console.log('DirectionPuzzle initialized.');
-  }
-
-  handleButtonClick(button) {
-    // extract direction from button name ('Press_Button_Directional_N')
-    const direction = this.getDirectionFromButton(button.name);
-
-    if (!direction) {
-      console.warn(`unknown button: ${button.name}`);
-      return;
-    }
-
-    // update working array
-    this.workingArray.push(direction);
-    this.workingArray.shift();
-
-    console.log(this.workingArray);
-
-    // check sequences and play animations if needed
-    this.checkSequences(direction);
-  }
-
-  getDirectionFromButton(buttonName) {
-    const mapping = {
-      Press_Button_Directional_S: 'S',
-      Press_Button_Directional_W: 'W',
-      Press_Button_Directional_E: 'E',
-      Press_Button_Directional_N: 'N',
-    };
-
-    // get button value if it exists in mapping object
-    return mapping[buttonName] || null;
-  }
-
-  checkSequences(lastDirection) {
-    this.sequences.forEach((sequenceObj) => {
-      if (sequenceObj.solved) return; // Skip solved sequences
-
-      const isSequenceSolved = this.workingArray.some((_, startIndex) => {
-        // don't continue if not enough elements in working array
-        if (startIndex + sequenceObj.sequence.length > this.workingArray.length) {
-          return false;
-        }
-
-        // only returns true when matching subsequence found
-        const subsequence = this.workingArray.slice(startIndex, startIndex + sequenceObj.sequence.length);
-        return JSON.stringify(subsequence) === JSON.stringify(sequenceObj.sequence);
-      });
-
-      if (isSequenceSolved) {
-        sequenceObj.solved = true;
-        this.solvedSequences++;
-        playAnimation('SlidePanel_E_Open');
-        playAnimation('SlidePanel_W_Open');
-        playAnimation('Moon_Panel_Open');
-
-        const outroBtn = document.getElementById('outro-button');
-        outroBtn.style.display = 'block';
-      }
-    });
-
-    this.isFullySolved = this.solvedSequences === this.sequences.length;
-    console.log('Is fully solved:', this.isFullySolved);
-  }
-
-}
 
 loadGLTFModel('/puzzlebox.glb')
   .then((gltf) => {
+    gltf.scene.traverse((child) => {
+      if (child.isMesh && child.name.startsWith('Press_Button_Directional_')) {
+        directionPuzzle.registerButton(child);
+      }
+    });
     console.log('Animations loaded:', gltfAnimations.map((clip) => clip.name));
   })
   .catch((error) => {
