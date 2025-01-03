@@ -1,26 +1,26 @@
 import { Puzzle } from './Puzzle'
 
 export class DirectionPuzzle extends Puzzle {
-  constructor(actions, lights) {
+  constructor(actions, displays) {
     super(actions);
     this.sequences = [
       {
         sequence: ['S', 'W', 'E', 'N'],
         solved: false,
         lightObj: null,
-        onComplete: () => this.triggerEffect('startSequence')
+        onComplete: () => this.triggerEffect('startSequenceComplete')
       },
       {
         sequence: ['N', 'W', 'S', 'W', 'N', 'W', 'N', 'E', 'N', 'E', 'N', 'W', 'N'],
         solved: false,
-        lightObj: lights[0],
-        onComplete: () => this.triggerEffect('mazeSequence')
+        lightObj: displays['lightE'],
+        onComplete: () => this.triggerEffect('mazeSequenceComplete')
       },
       {
         sequence: ['E', 'N', 'W', 'W', 'S', 'N', 'E', 'S'],
         solved: false,
-        lightObj: lights[1],
-        onComplete: () => this.triggerEffect('cipherSequence')
+        lightObj: displays['lightS'],
+        onComplete: () => this.triggerEffect('cipherSequenceComplete')
       },
     ];
     this.workingArray = Array(13).fill(null);
@@ -44,10 +44,10 @@ export class DirectionPuzzle extends Puzzle {
 
   getDirectionFromButton(buttonName) {
     const mapping = {
+      Press_Button_Directional_N: 'N',
       Press_Button_Directional_S: 'S',
       Press_Button_Directional_W: 'W',
-      Press_Button_Directional_E: 'E',
-      Press_Button_Directional_N: 'N',
+      Press_Button_Directional_E: 'E'
     };
     // returns mapped character if it exists
     return mapping[buttonName] || null;

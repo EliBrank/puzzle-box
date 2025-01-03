@@ -35,4 +35,6 @@ export class PuzzleManager {
       }
     }
   }
+
+  // put code to handle events
 }

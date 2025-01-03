@@ -43,18 +43,18 @@ export class Puzzle {
   updateDisplayMaterial(isActivated = true) {
     const displayMaterial = this.lightObj.material;
     if (!displayMaterial) {
-      console.warn('no material found for associated light object');
+      console.warn('No material found for associated light object');
       return;
     }
 
     if (isActivated) {
       displayMaterial.emissive.setHex(0xffffff);
       displayMaterial.emissiveIntensity = 1.0;
-      console.log('light updated: on');
+      console.log('Light updated: on');
     } else {
       displayMaterial.emissive.setHex(0x000000);
       displayMaterial.emissiveIntensity = 0.0;
-      console.log('light updated: off');
+      console.log('Light updated: off');
     }
   }
 }
