@@ -1,8 +1,80 @@
 import { Puzzle } from './Puzzle'
 
 export class DirectionPuzzle extends Puzzle {
-  constructor(actions) {
+  constructor(actions, lights) {
     super(actions);
-
+    this.sequences = [
+      {
+        sequence: ['S', 'W', 'E', 'N'],
+        solved: false,
+        lightObj: null,
+        onComplete: () => this.triggerEffect('startSequence')
+      },
+      {
+        sequence: ['N', 'W', 'S', 'W', 'N', 'W', 'N', 'E', 'N', 'E', 'N', 'W', 'N'],
+        solved: false,
+        lightObj: lights[0],
+        onComplete: () => this.triggerEffect('mazeSequence')
+      },
+      {
+        sequence: ['E', 'N', 'W', 'W', 'S', 'N', 'E', 'S'],
+        solved: false,
+        lightObj: lights[1],
+        onComplete: () => this.triggerEffect('cipherSequence')
+      },
+    ];
+    this.workingArray = Array(13).fill(null);
   }
+
+  handleButtonClick(button) {
+    const direction = this.getDirectionFromButton(button.name);
+
+    if (!direction) {
+      console.warn(`Unknown button: ${button.name}`);
+      return;
+    }
+
+    this.workingArray.push(direction);
+    this.workingArray.shift();
+    // DELETE
+    console.log(this.workingArray);
+
+    this.checkSequences();
+  }
+
+  getDirectionFromButton(buttonName) {
+    const mapping = {
+      Press_Button_Directional_S: 'S',
+      Press_Button_Directional_W: 'W',
+      Press_Button_Directional_E: 'E',
+      Press_Button_Directional_N: 'N',
+    };
+    // returns mapped character if it exists
+    return mapping[buttonName] || null;
+  }
+
+  checkSequences() {
+    this.sequences.forEach((sequenceObj) => {
+      // skip completed sequences
+      if (sequenceObj.solved) return;
+
+      const matchFound = this.workingArray
+        // evaluates only last relevent values from working array
+        .slice(-sequenceObj.sequence.length)
+        // returns true only if every value at every index matches
+        .every((value, index) => value === sequenceObj.sequence[index]);
+
+      if (matchFound) {
+        sequenceObj.solved = true;
+        console.log(`sequence solved: ${sequenceObj.sequence}`);
+        sequenceObj.onComplete();
+      }
+    });
+  }
+
+  triggerEffect(effectName) {
+    console.log(`effect triggered: ${effectName}`);
+    this.playAnimation(effectName);
+  }
+
 }
