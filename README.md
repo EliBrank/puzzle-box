@@ -7,10 +7,10 @@
 [Click here to view the site](https://puzzlebox.vercel.app/)
 
 ## 👤 About the Developer
-Hi, I'm Elias Brinkman, a developer with some a background in digital art and design, and a love for interactive experiences. 
+Hi, I'm Elias Brinkman, a developer with a background in digital art and design, and a love for interactive experiences. 
 This project was born out of my fascination with physical puzzle boxes and the desire to reimagine that in a browser-based format.
 
-- 🔗 [Portfolio](ezb.xyz)
+- 🔗 [Portfolio](https://ezb.xyz)
 - 💼 [LinkedIn](https://www.linkedin.com/in/elias-brinkman/)
 
 ## ✨ Project Description
