@@ -12,7 +12,7 @@ const controls = setupControls(camera, renderer);
 const puzzleManager = new PuzzleManager();
 
 loadGLTFModel('/puzzlebox.glb', scene, mixer)
-  // destructure loadGLTFModel return to immediately access values
+  // destructure return from loadGLTFModel to immediately access values
   .then(({ gltf, actions }) => {
     const displays = {
       'lightN': gltf.scene.getObjectByName('Light_Top_N'),
