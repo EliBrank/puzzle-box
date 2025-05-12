@@ -12,18 +12,18 @@ export function setupUI() {
     }
   ];
 
-  // TODO: Make open button a class instead of id
   modals.forEach(({ id, openClass, closeClass }) => {
     const modal = document.getElementById(id);
-    const openButton = document.querySelector(`.${openClass}`);
+    const openButtons = document.querySelectorAll(`.${openClass}`);
     const closeButtons = document.querySelectorAll(`.${closeClass}`);
 
-    if (!modal || !openButton) {
+    if (!modal || !openButtons) {
       console.warn(`Button not found for modal: ${id}`);
     }
 
-    // FIX: openButton may need to be changed to array of buttons later
-    openButton.addEventListener('click', () => toggleModal(modal, true));
+    openButtons.forEach((btn) => {
+      btn.addEventListener('click', () => toggleModal(modal, true));
+    });
     closeButtons.forEach((btn) => {
       btn.addEventListener('click', () => toggleModal(modal, false));
     });

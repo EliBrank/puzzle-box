@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 export function setupScene() {
-  const scene = new THREE.scene();
+  const scene = new THREE.Scene();
   const renderer = new THREE.WebGLRenderer({
     antialias: true,
     alpha: true
@@ -10,13 +10,13 @@ export function setupScene() {
   document.body.appendChild(renderer.domElement);
 
   // create backup camera
-  let currentCamera = new THREE.PerspectiveCamera(
+  let camera = new THREE.PerspectiveCamera(
     75,
     window.innerWidth / window.innerHeight,
     0.1,
     1000
   );
-  currentCamera.position.set(0, 2, 5);
+  camera.position.set(0, 2, 5);
 
   const mixer = new THREE.AnimationMixer(scene);
   const mouse = new THREE.Vector2();
@@ -24,10 +24,10 @@ export function setupScene() {
 
   // handle window resize
   window.addEventListener('resize', () => {
-    currentCamera.aspect = window.innerWidth / window.innerHeight;
-    currentCamera.updateProjectionMatrix();
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
 
-  return { scene, renderer, currentCamera, mixer, mouse, raycaster };
+  return { scene, renderer, camera, mixer, mouse, raycaster };
 }

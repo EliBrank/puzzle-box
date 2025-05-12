@@ -14,8 +14,7 @@ export class DirectionPuzzle extends Puzzle {
         sequence: ['N', 'W', 'S', 'W', 'N', 'W', 'N', 'E', 'N', 'E', 'N', 'W', 'N'],
         solved: false,
         lightObj: displays['lightE'],
-        onComplete: () => this.triggerEffect('mazeSequenceComplete')
-      },
+        onComplete: () => this.triggerEffect('mazeSequenceComplete') },
       {
         sequence: ['E', 'N', 'W', 'W', 'S', 'N', 'E', 'S'],
         solved: false,

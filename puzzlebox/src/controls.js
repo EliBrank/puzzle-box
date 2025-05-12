@@ -1,7 +1,7 @@
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 export function setupControls(camera, renderer) {
-  const controls = new OrbitControls(currentCamera, renderer.domElement);
+  const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   controls.enablePan = false;
   controls.minDistance = 2.5;

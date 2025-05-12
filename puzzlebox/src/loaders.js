@@ -1,6 +1,6 @@
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
-export function loadGLTFModel(modelFilePath, scene) {
+export function loadGLTFModel(modelFilePath, scene, mixer) {
   return new Promise((resolve, reject) => {
     const loader = new GLTFLoader();
     loader.load(
