@@ -1,6 +1,7 @@
 import { setupScene } from './scene';
 import { setupControls } from './controls';
 import { setupUI } from './ui';
+import { setupInput } from './input';
 import { PuzzleManager } from './puzzles/PuzzleManager';
 import { DirectionPuzzle } from './puzzles/DirectionPuzzle';
 //import { MoonPuzzle } from './puzzles/MoonPuzzle';
@@ -37,21 +38,7 @@ loadGLTFModel('/puzzlebox.glb', scene, mixer)
 setupUI();
 
 // handle mouse stuff
-window.addEventListener('click', (event) => {
-  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-  raycaster.setFromCamera(mouse, camera);
-
-  const intersects = raycaster.intersectObjects(
-    puzzleManager.puzzles.flatmap(puzzle => puzzle.interactiveButtons)
-  );
-
-  if (intersects.length > 0) {
-    const clickedButton = intersects[0].object;
-    puzzleManager.handleClick(clickedButton);
-  }
-});
+setupInput(raycaster, mouse, camera, puzzleManager);
 
 function animate() {
   requestAnimationFrame(animate);
