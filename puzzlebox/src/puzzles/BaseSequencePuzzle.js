@@ -48,11 +48,4 @@ export class BaseSequencePuzzle extends Puzzle {
 
     this.checkSequence();
   }
-
-  markAsCompleted() {
-    this.isCompleted = true;
-
-    this.updateLightMaterial(true);
-    this.triggerBackgroundFlash();
-  }
 }

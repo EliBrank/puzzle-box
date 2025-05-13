@@ -24,11 +24,11 @@ export class Puzzle {
     this.isCompleted = true;
 
     // ensure interactive buttons array is empty
-    this.interactiveButtons.length = 0;
-    this.updateLightMaterial(true);
+    // this.interactiveButtons.length = 0;
+    // this.updateLightMaterial(true);
     this.triggerBackgroundFlash();
 
-    console.log('Puzzle marked as complete. Interactions disabled.');
+    // console.log('Puzzle marked as complete. Interactions disabled.');
   }
 
   triggerBackgroundFlash() {
@@ -38,6 +38,7 @@ export class Puzzle {
     flashElement.style.transition = 'none';
     flashElement.style.opacity = '0.25';
 
+    // NOTE: Look more into how this works
     void flashElement.offsetWidth;
 
     flashElement.style.transition = 'opacity 1s ease-out';
@@ -62,20 +63,11 @@ export class Puzzle {
   }
 
   updateLightMaterial(isActivated = true) {
-    const lightMaterial = this.lightObj.material;
-    if (!lightMaterial) {
-      console.warn('No material found for associated light object');
+    if (!this.lightObj || !this.offMaterial || !this.onMaterial) {
+      console.warn('Cannot update light material - missing references');
       return;
     }
 
-    if (isActivated) {
-      lightMaterial.emissive.setHex(0xffffff);
-      lightMaterial.emissiveIntensity = 1.0;
-      console.log('Light updated: on');
-    } else {
-      lightMaterial.emissive.setHex(0x000000);
-      lightMaterial.emissiveIntensity = 0.0;
-      console.log('Light updated: off');
-    }
+    this.lightObj.material = isActivated ? this.onMaterial : this.offMaterial;
   }
 }
