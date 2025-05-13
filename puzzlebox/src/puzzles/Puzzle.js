@@ -1,11 +1,10 @@
 import * as THREE from 'three';
 
 export class Puzzle {
-  constructor(actions, lightObj = null) {
+  constructor(actions) {
     this.isCompleted = false;
     this.interactiveButtons = [];
     this.actions = actions;
-    this.lightObj = lightObj;
   }
 
   handleButtonClick(button) {
@@ -26,9 +25,23 @@ export class Puzzle {
 
     // ensure interactive buttons array is empty
     this.interactiveButtons.length = 0;
-    this.updateDisplayMaterial(true);
+    this.updateLightMaterial(true);
+    this.triggerBackgroundFlash();
 
     console.log('Puzzle marked as complete. Interactions disabled.');
+  }
+
+  triggerBackgroundFlash() {
+    const flashElement = document.getElementById('background-flash');
+    if (!flashElement) return;
+
+    flashElement.style.transition = 'none';
+    flashElement.style.opacity = '0.25';
+
+    void flashElement.offsetWidth;
+
+    flashElement.style.transition = 'opacity 1s ease-out';
+    flashElement.style.opacity = '0';
   }
 
   registerButton(button) {
@@ -48,20 +61,20 @@ export class Puzzle {
     console.log(`Playing animation: ${name}`);
   }
 
-  updateDisplayMaterial(isActivated = true) {
-    const displayMaterial = this.lightObj.material;
-    if (!displayMaterial) {
+  updateLightMaterial(isActivated = true) {
+    const lightMaterial = this.lightObj.material;
+    if (!lightMaterial) {
       console.warn('No material found for associated light object');
       return;
     }
 
     if (isActivated) {
-      displayMaterial.emissive.setHex(0xffffff);
-      displayMaterial.emissiveIntensity = 1.0;
+      lightMaterial.emissive.setHex(0xffffff);
+      lightMaterial.emissiveIntensity = 1.0;
       console.log('Light updated: on');
     } else {
-      displayMaterial.emissive.setHex(0x000000);
-      displayMaterial.emissiveIntensity = 0.0;
+      lightMaterial.emissive.setHex(0x000000);
+      lightMaterial.emissiveIntensity = 0.0;
       console.log('Light updated: off');
     }
   }

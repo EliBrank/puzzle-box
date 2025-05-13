@@ -5,6 +5,8 @@ import { setupUI } from './ui';
 import { setupInput } from './input';
 import { PuzzleManager } from './puzzles/PuzzleManager';
 import { DirectionPuzzle } from './puzzles/DirectionPuzzle';
+import { MazeSequencePuzzle } from './puzzles/MazeSequencePuzzle';
+import { StartSequencePuzzle } from './puzzles/StartSequencePuzzle';
 //import { MoonPuzzle } from './puzzles/MoonPuzzle';
 //import { ScalesPuzzle } from './puzzles/ScalesPuzzle';
 import { loadGLTFModel } from './loaders';
@@ -16,22 +18,15 @@ const puzzleManager = new PuzzleManager();
 loadGLTFModel('/puzzlebox.glb', scene, mixer)
   // destructure return from loadGLTFModel to immediately access values
   .then(({ gltf, actions }) => {
-    const displays = {
-      'lightN': gltf.scene.getObjectByName('Light_Top_N'),
-      'lightS': gltf.scene.getObjectByName('Light_Top_S'),
-      'lightW': gltf.scene.getObjectByName('Light_Top_W'),
-      'lightE': gltf.scene.getObjectByName('Light_Top_E')
-    };
-    
     console.log(Object.keys(actions));
 
     // puzzle setup
-    const directionPuzzle = new DirectionPuzzle(actions, displays);
+    const startPuzzle = new StartSequencePuzzle(gltf.scene, actions);
     //const moonPuzzle = new MoonPuzzle(actions, displays['lightN']);
     //const scalesPuzzle = new ScalesPuzzle(actions);
 
     // register puzzles
-    puzzleManager.addPuzzle(directionPuzzle, 'Press_Button_Directional_');
+    puzzleManager.addPuzzle(startPuzzle);
     //puzzleManager.addPuzzle(moonPuzzle, 'Press_Button_Moon_');
     //puzzleManager.addPuzzle(scalesPuzzle, 'Press_Button_Scales_');
 

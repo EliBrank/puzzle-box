@@ -8,7 +8,7 @@ export class DirectionPuzzle extends Puzzle {
         sequence: ['S', 'W', 'E', 'N'],
         solved: false,
         lightObj: null,
-        onComplete: () => this.triggerEffect('startSequenceComplete'),
+        onComplete: () => this.triggerBackgroundFlash(),
         animations: ['SlidePanel_E_Open']
       },
       {
@@ -25,8 +25,6 @@ export class DirectionPuzzle extends Puzzle {
     ];
     this.workingArray = Array(13).fill(null);
   }
-
-  static buttonPrefix = 'Press_Button_Directional_'
 
   getExpectedButtonNames() {
     return [
