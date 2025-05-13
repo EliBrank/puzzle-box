@@ -1,7 +1,10 @@
+import * as THREE from 'three';
+
 export class Puzzle {
   constructor(actions, lightObj = null) {
     this.isCompleted = false;
     this.interactiveButtons = [];
+    this.actions = actions;
     this.lightObj = lightObj;
   }
 
@@ -13,18 +16,23 @@ export class Puzzle {
     console.warn('handleButtonClick should be implemented in child classes');
   }
 
+  getExpectedButtonNames() {
+    console.warn('Child classes should implement a return array of expected values if buttons are needed');
+    return false;
+  }
+
   markAsCompleted() {
     this.isCompleted = true;
 
     // ensure interactive buttons array is empty
     this.interactiveButtons.length = 0;
+    this.updateDisplayMaterial(true);
 
     console.log('Puzzle marked as complete. Interactions disabled.');
   }
 
   registerButton(button) {
     this.interactiveButtons.push(button);
-    puzzleManager.registerButton(button);
   }
 
   playAnimation(name) {

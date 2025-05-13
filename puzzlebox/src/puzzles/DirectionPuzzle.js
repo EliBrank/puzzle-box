@@ -8,7 +8,8 @@ export class DirectionPuzzle extends Puzzle {
         sequence: ['S', 'W', 'E', 'N'],
         solved: false,
         lightObj: null,
-        onComplete: () => this.triggerEffect('startSequenceComplete')
+        onComplete: () => this.triggerEffect('startSequenceComplete'),
+        animations: ['SlidePanel_E_Open']
       },
       {
         sequence: ['N', 'W', 'S', 'W', 'N', 'W', 'N', 'E', 'N', 'E', 'N', 'W', 'N'],
@@ -25,6 +26,17 @@ export class DirectionPuzzle extends Puzzle {
     this.workingArray = Array(13).fill(null);
   }
 
+  static buttonPrefix = 'Press_Button_Directional_'
+
+  getExpectedButtonNames() {
+    return [
+      'Press_Button_Directional_N',
+      'Press_Button_Directional_S',
+      'Press_Button_Directional_W',
+      'Press_Button_Directional_E'
+    ]
+  }
+
   handleButtonClick(button) {
     const direction = this.getDirectionFromButton(button.name);
 
@@ -37,6 +49,7 @@ export class DirectionPuzzle extends Puzzle {
     this.workingArray.shift();
     // DELETE
     console.log(this.workingArray);
+    this.playAnimation(button.name);
 
     this.checkSequences();
   }

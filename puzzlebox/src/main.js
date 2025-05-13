@@ -1,3 +1,4 @@
+import * as THREE from 'three';
 import { setupScene } from './scene';
 import { setupControls } from './controls';
 import { setupUI } from './ui';
@@ -20,7 +21,9 @@ loadGLTFModel('/puzzlebox.glb', scene, mixer)
       'lightS': gltf.scene.getObjectByName('Light_Top_S'),
       'lightW': gltf.scene.getObjectByName('Light_Top_W'),
       'lightE': gltf.scene.getObjectByName('Light_Top_E')
-    }
+    };
+    
+    console.log(Object.keys(actions));
 
     // puzzle setup
     const directionPuzzle = new DirectionPuzzle(actions, displays);
@@ -40,8 +43,12 @@ setupUI();
 // handle mouse stuff
 setupInput(raycaster, mouse, camera, puzzleManager);
 
+const clock = new THREE.Clock();
+
 function animate() {
   requestAnimationFrame(animate);
+  const delta = clock.getDelta();
+  mixer.update(delta);
   controls.update();
   renderer.render(scene, camera);
 }
