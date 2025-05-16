@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { PuzzleManager } from './PuzzleManager';
 
 export class Puzzle {
   constructor(actions = {}, scene = null) {
@@ -6,6 +7,7 @@ export class Puzzle {
     this.interactiveButtons = [];
     this.actions = actions;
     this.scene = scene;
+    this.listeners = [];
 
     this.lightMaterials = {
       off: null,
@@ -28,6 +30,7 @@ export class Puzzle {
 
   markAsCompleted() {
     this.isCompleted = true;
+    this.emit('completed');
     this.triggerBackgroundFlash();
   }
 
@@ -93,5 +96,17 @@ export class Puzzle {
     }
 
     lightObj.material = isActivated ? this.lightMaterials.on : this.lightMaterials.off;
+  }
+
+  on(event, callback) {
+    this.listeners.push({ event, callback });
+  }
+
+  emit(event) {
+    this.listeners.forEach((listener) => {
+      if (listener.event === event) {
+        listener.callback();
+      }
+    });
   }
 }

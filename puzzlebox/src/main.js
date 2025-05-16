@@ -7,9 +7,9 @@ import { PuzzleManager } from './puzzles/PuzzleManager';
 import { StartSequencePuzzle } from './puzzles/StartSequencePuzzle';
 import { MazeSequencePuzzle } from './puzzles/MazeSequencePuzzle';
 import { ScalesPuzzle } from './puzzles/ScalesPuzzle';
-//import { MoonPuzzle } from './puzzles/MoonPuzzle';
+import { MoonPuzzle } from './puzzles/MoonPuzzle';
+import { CipherSequencePuzzle } from './puzzles/CipherSequencePuzzle';
 import { loadGLTFModel } from './loaders';
-import { Puzzle } from './puzzles/Puzzle';
 
 const { scene, renderer, camera, mixer, mouse, raycaster } = setupScene();
 const controls = setupControls(camera, renderer);
@@ -24,14 +24,15 @@ loadGLTFModel('/puzzlebox.glb', scene, mixer)
     const startPuzzle = new StartSequencePuzzle(actions, gltf.scene);
     const mazePuzzle = new MazeSequencePuzzle(actions, gltf.scene);
     const scalesPuzzle = new ScalesPuzzle(actions, gltf.scene);
-    //const moonPuzzle = new MoonPuzzle(actions, gltf.scene);
+    const moonPuzzle = new MoonPuzzle(actions, gltf.scene);
+    const cipherPuzzle = new CipherSequencePuzzle(actions, gltf.scene);
 
     // register puzzles
     puzzleManager.addPuzzle(startPuzzle);
     puzzleManager.addPuzzle(mazePuzzle);
     puzzleManager.addPuzzle(scalesPuzzle);
-    //puzzleManager.addPuzzle(moonPuzzle);
-    mazePuzzle.playAnimation('Moon_Panel_Open');
+    puzzleManager.addPuzzle(moonPuzzle);
+    puzzleManager.addPuzzle(cipherPuzzle);
 
     puzzleManager.registerButtonsFromGLTF(gltf.scene);
   });

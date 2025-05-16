@@ -2,10 +2,22 @@ export class PuzzleManager {
   constructor() {
     this.puzzles = [];
     this.meshMap = {};
+    this.completedPuzzles = new Set();
+    this.allPuzzlesCompleted = false;
   }
 
   addPuzzle(puzzleObj) {
     this.puzzles.push(puzzleObj);
+    puzzleObj.on('completed', () => this.handlePuzzleComplete(puzzleObj));
+  }
+
+  handlePuzzleComplete(puzzleObj) {
+    this.completedPuzzles.add(puzzleObj);
+
+    if (this.completedPuzzles.size === this.puzzles.length) {
+      this.allPuzzlesCompleted = true;
+      document.dispatchEvent(new CustomEvent('allPuzzlesCompleted'));
+    }
   }
 
   registerButtonsFromGLTF(gltfScene) {

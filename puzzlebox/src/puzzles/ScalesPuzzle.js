@@ -37,6 +37,7 @@ export class ScalesPuzzle extends Puzzle {
 
     this.setupMaterials();
     this.scaleAnimator = new ScaleAnimator(scene);
+    this.scaleAnimator.transition('Even', 'Light');
 
     Object.keys(this.weights).forEach((key) => {
       this.updateLightColor(key);

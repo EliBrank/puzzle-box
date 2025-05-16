@@ -32,4 +32,11 @@ export function setupUI() {
   function toggleModal(modal, isVisible) {
     modal.style.display = isVisible ? 'block' : 'none';
   }
+
+  document.addEventListener('allPuzzlesCompleted', () => {
+    const outroButton = document.querySelector('.outro-button');
+    if (outroButton) outroButton.style.display = 'block';
+  });
+
+  toggleModal(document.getElementById('intro'), true);
 }
