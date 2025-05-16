@@ -20,8 +20,6 @@ export class PuzzleManager {
       });
     }
 
-    console.log(this.meshMap);
-
     // register buttons for each puzzle
     this.puzzles.forEach((puzzle) => {
       if (typeof puzzle.getExpectedButtonNames !== 'function') {
@@ -30,6 +28,7 @@ export class PuzzleManager {
       }
 
       const expectedNames = puzzle.getExpectedButtonNames();
+      console.log(`${puzzle.constructor.name} buttons: ${expectedNames}`);
 
       if (!Array.isArray(expectedNames)) {
         console.warn(`[PuzzleManager] getExpectedButtonNames() for ${puzzle.constructor.name} does not return array`);
@@ -49,7 +48,8 @@ export class PuzzleManager {
 
   handleClick(button) {
     for (const puzzle of this.puzzles) {
-      if (!puzzle.isCompleted) {
+      if (puzzle.isCompleted) continue;
+      if (puzzle.interactiveButtons.includes(button)) {
         puzzle.handleButtonClick(button);
       }
     }
@@ -73,6 +73,4 @@ export class PuzzleManager {
       }
     });
   }
-
-  // put code to handle events
 }
