@@ -1,10 +1,16 @@
 import * as THREE from 'three';
 
 export class Puzzle {
-  constructor(actions) {
+  constructor(actions = {}, scene = null) {
     this.isCompleted = false;
     this.interactiveButtons = [];
     this.actions = actions;
+    this.scene = scene;
+
+    this.lightMaterials = {
+      off: null,
+      on: null,
+    }
   }
 
   handleButtonClick(button) {
@@ -22,13 +28,7 @@ export class Puzzle {
 
   markAsCompleted() {
     this.isCompleted = true;
-
-    // ensure interactive buttons array is empty
-    // this.interactiveButtons.length = 0;
-    // this.updateLightMaterial(true);
     this.triggerBackgroundFlash();
-
-    // console.log('Puzzle marked as complete. Interactions disabled.');
   }
 
   triggerBackgroundFlash() {
@@ -49,25 +49,49 @@ export class Puzzle {
     this.interactiveButtons.push(button);
   }
 
-  playAnimation(name) {
+  playAnimation(name, isScaleTransition = false) {
     if (!this.actions || !this.actions[name]) {
       console.warn(`Animation not found: ${name}`);
       return;
     }
+
     const action = this.actions[name];
-    action.reset();
+
+    // Stop and reset the action to ensure it starts cleanly
+    action.stop().reset();
+
     action.setLoop(THREE.LoopOnce);
     action.clampWhenFinished = true;
     action.play();
+
     console.log(`Playing animation: ${name}`);
   }
 
-  updateLightMaterial(isActivated = true) {
-    if (!this.lightObj || !this.offMaterial || !this.onMaterial) {
+  initLightMaterials(scene, lightName) {
+    const groupObj = scene.getObjectByName(lightName);
+    const lightObj = groupObj?.children.find((child) => (
+      child.material?.name === 'Light_Display'
+    ));
+
+    if (lightObj) {
+      this.lightMaterials.off = lightObj.material;
+
+      // create "on" light material by creating, modifying copy of existing "off" material
+      this.lightMaterials.on = this.lightMaterials.off.clone();
+      this.lightMaterials.on.name = 'Light_Display_White';
+      this.lightMaterials.on.emissive.setHex(0xffffff);
+      this.lightMaterials.on.emissiveIntensity = 1.0;
+    }
+
+    return lightObj;
+  }
+
+  updateLightMaterial(lightObj, isActivated = true) {
+    if (!lightObj || !this.lightMaterials) {
       console.warn('Cannot update light material - missing references');
       return;
     }
 
-    this.lightObj.material = isActivated ? this.onMaterial : this.offMaterial;
+    lightObj.material = isActivated ? this.lightMaterials.on : this.lightMaterials.off;
   }
 }

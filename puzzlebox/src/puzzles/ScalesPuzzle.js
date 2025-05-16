@@ -3,11 +3,10 @@ import { Puzzle } from './Puzzle';
 import { ScaleAnimator } from './ScaleAnimator';
 
 export class ScalesPuzzle extends Puzzle {
-  constructor(scene, actions) {
-    super(actions);
+  constructor(actions, scene) {
+    super(actions, scene);
 
     this.lastBalanceState = 'Light';
-    this.scene = scene;
 
     this.colorOptions = [
       { name: 'colOne', value: 9, hex: '#990000' },
@@ -162,7 +161,8 @@ export class ScalesPuzzle extends Puzzle {
     console.log('Available color materials:', Object.keys(this.colorMaterials)); // Debug
     console.log('colorSuccess exists?', 'colorSuccess' in this.colorMaterials); // Debug
 
-    this.updateLightMaterial(true);
+    const puzzleClearLight = this.initLightMaterials(this.scene, 'Light_Top_W');
+    this.updateLightMaterial(puzzleClearLight, true);
     Object.keys(this.weights).forEach((key) => {
       const mat = this.colorMaterials['colSuccess'];
       const lights = this.lights[key];

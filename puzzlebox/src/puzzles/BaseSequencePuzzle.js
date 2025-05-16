@@ -1,8 +1,8 @@
 import { Puzzle } from './Puzzle'
 
 export class BaseSequencePuzzle extends Puzzle {
-  constructor(sequence, actions) {
-    super(actions);
+  constructor(sequence, actions, scene) {
+    super(actions, scene);
     this.sequence = sequence;
     this.workingArray = Array(sequence.length).fill(null);
   }
@@ -28,9 +28,8 @@ export class BaseSequencePuzzle extends Puzzle {
   }
 
   checkSequence() {
-    if (this.isCompleted) {
-      return;
-    }
+    if (this.isCompleted) return;
+
     const isMatch = this.sequence.every((value, index) => (
       value === this.workingArray[index]
     ));

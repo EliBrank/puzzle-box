@@ -21,16 +21,16 @@ loadGLTFModel('/puzzlebox.glb', scene, mixer)
     console.log(Object.keys(actions));
 
     // puzzle setup
-    const startPuzzle = new StartSequencePuzzle(gltf.scene, actions);
-    const mazePuzzle = new MazeSequencePuzzle(gltf.scene, actions);
-    const scalesPuzzle = new ScalesPuzzle(gltf.scene, actions);
-    //const moonPuzzle = new MoonPuzzle(actions, displays['lightN']);
+    const startPuzzle = new StartSequencePuzzle(actions, gltf.scene);
+    const mazePuzzle = new MazeSequencePuzzle(actions, gltf.scene);
+    const scalesPuzzle = new ScalesPuzzle(actions, gltf.scene);
+    //const moonPuzzle = new MoonPuzzle(actions, gltf.scene);
 
     // register puzzles
     puzzleManager.addPuzzle(startPuzzle);
     puzzleManager.addPuzzle(mazePuzzle);
     puzzleManager.addPuzzle(scalesPuzzle);
-    //puzzleManager.addPuzzle(moonPuzzle, 'Press_Button_Moon_');
+    //puzzleManager.addPuzzle(moonPuzzle);
     mazePuzzle.playAnimation('Moon_Panel_Open');
 
     puzzleManager.registerButtonsFromGLTF(gltf.scene);
