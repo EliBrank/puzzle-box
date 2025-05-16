@@ -148,7 +148,7 @@ class DirectionPuzzle {
 
 // BALANCE PUZZLE
 
-class BalancePuzzle {
+class ScalesPuzzle {
   constructor() {
     this.colorOptions = [
       { 'colorOne': 2 },
@@ -295,5 +295,5 @@ class BalancePuzzle {
 document.addEventListener('DOMContentLoaded', () => {
   window.moonPuzzle = new MoonPuzzle();
   window.directionPuzzle = new DirectionPuzzle();
-  window.balancePuzzle = new BalancePuzzle();
+  window.scalesPuzzle = new ScalesPuzzle();
 });
