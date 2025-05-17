@@ -40,7 +40,7 @@ loadGLTFModel('/puzzlebox.glb', scene, mixer)
 setupUI();
 
 // handle mouse stuff
-setupInput(raycaster, mouse, camera, puzzleManager);
+setupInput(raycaster, mouse, camera, puzzleManager, renderer.domElement);
 
 const clock = new THREE.Clock();
 

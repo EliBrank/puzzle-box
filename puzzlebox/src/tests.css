@@ -39,7 +39,7 @@ button {
 .page-title {
   font-size: 3rem;
   text-align: center;
-  margin-block: 2rem;
+  margin-top: 4rem;
 }
 
 .puzzle-title {
@@ -56,6 +56,17 @@ button {
   text-align: center;
   margin: 1rem auto;
   border: 1px solid black;
+  padding-block: 2rem;
+}
+
+.test-page-info {
+  --max-width: 976px;
+  --padding: 1rem;
+
+  width: min(var(--max-width), 100% - (var(--padding) * 2));
+
+  text-align: center;
+  margin-inline: auto;
   padding-block: 2rem;
 }
 

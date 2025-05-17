@@ -103,6 +103,10 @@ button {
   background-color: rgba(0,0,0,0.4);
 }
 
+.modal i {
+  font-style: italic;
+}
+
 .modal-content {
   background-color: var(--clr-primary-light);
   padding-inline: 2rem;
